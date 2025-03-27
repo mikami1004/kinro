@@ -3,11 +3,17 @@ await webView.loadURL("https://kinro.ntv.co.jp/lineup");
 let html = await webView.getHTML();
 let title;
 let date;
+let lineup;
+const cmp = /今後の放送ラインナップ[\s\S]*?<\/ul>/g;
+lineup = html.match(cmp).join('');
+
 const np = /(?:<a href=\"\/lineup\/\d{0,}\">).*?(?=<\/a>)/g;
 const dp = /(?:<a href=\"\/lineup\/\d{4}).*?(?=\".*<\/a>)/g;
 
-title=html.match(np);
-date=html.match(dp);
+//title=html.match(np[1]);
+title=[...lineup.matchAll(np)].map(m=>m[1]);
+//date=html.match(dp[1]);
+date=[...lineup.matchAll(dp)].map(m=>m[1]);
 
 let mm_dd=[date.length];
 for(let i=0;i<date.length;i++) {
